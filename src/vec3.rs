@@ -1,18 +1,14 @@
-use std::ops::{Add, AddAssign, Mul, Neg, Sub};
-/*
- * Remaining things to implement:
- * *=
- * /=
- * scalar divide
- * dot product
- * cross multiplication
- * unit vector
- */
+use std::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Neg, Sub};
+
+/// A 3 dimensional vector type that implements
+/// many common, useful mathematical operations
+/// on vectors.
 pub struct Vec3 {
     x: f64,
     y: f64,
     z: f64,
 }
+
 impl Vec3 {
     pub fn x(&self) -> &f64 {
         &self.x
@@ -28,6 +24,19 @@ impl Vec3 {
     }
     fn length_squared(&self) -> f64 {
         self.x * self.x + self.y * self.y + self.z * self.z
+    }
+    pub fn dot(&self, other: &Vec3) -> f64 {
+        self.x * other.x + self.y * other.y + self.z * other.z
+    }
+    pub fn cross(&self, other: &Vec3) -> Vec3 {
+        Vec3 {
+            x: self.y * other.z - self.z * other.y,
+            y: self.z * other.x - self.x * other.z,
+            z: self.x * other.y - self.y * other.x,
+        }
+    }
+    pub fn unit_vector(&self) -> Vec3 {
+        self / &self.length()
     }
 }
 impl Neg for &Vec3 {
@@ -103,10 +112,33 @@ impl Mul<&Vec3> for &f64 {
         }
     }
 }
+impl MulAssign<&f64> for Vec3 {
+    fn mul_assign(&mut self, rhs: &f64) {
+        self.x *= rhs;
+        self.y *= rhs;
+        self.z *= rhs;
+    }
+}
+impl Div<&f64> for &Vec3 {
+    type Output = Vec3;
+
+    fn div(self, rhs: &f64) -> Vec3 {
+        Vec3 {
+            x: self.x / rhs,
+            y: self.y / rhs,
+            z: self.z / rhs,
+        }
+    }
+}
+impl DivAssign<&f64> for Vec3 {
+    fn div_assign(&mut self, rhs: &f64) {
+        self.x /= rhs;
+        self.y /= rhs;
+        self.z /= rhs;
+    }
+}
 impl ToString for Vec3 {
     fn to_string(&self) -> String {
         format!("{} {} {}", self.x, self.y, self.y)
     }
 }
-
-pub struct Point3(Vec3);
