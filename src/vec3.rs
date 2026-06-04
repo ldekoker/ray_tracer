@@ -38,6 +38,13 @@ impl Vec3 {
     pub fn unit_vector(&self) -> Vec3 {
         self / &self.length()
     }
+    pub fn destructure(&self) -> (&f64, &f64, &f64) {
+        (&self.x, &self.y, &self.z)
+    }
+
+    pub fn new(x: f64, y: f64, z: f64) -> Self {
+        Self { x, y, z }
+    }
 }
 impl Neg for &Vec3 {
     type Output = Vec3;
@@ -138,3 +145,6 @@ impl ToString for Vec3 {
         format!("{} {} {}", self.x, self.y, self.y)
     }
 }
+
+// Aliases
+pub struct Point3(Vec3);

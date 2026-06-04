@@ -1,5 +1,9 @@
 use env_logger::Env;
 use log::info;
+use ray_tracer::{
+    colour::{Colour, write_colour},
+    vec3::Vec3,
+};
 
 fn main() {
     env_logger::Builder::from_env(Env::default().default_filter_or("info")).init();
@@ -13,15 +17,12 @@ fn main() {
         info!("/rScanlines remaining: {} ", (image_height - j));
 
         for i in 0..image_width {
-            let r: f64 = (i as f64) / ((image_width - 1) as f64);
-            let g: f64 = (j as f64) / ((image_height - 1) as f64);
-            let b: f64 = 0.0;
-
-            let ir: i32 = (255.999 * r) as i32;
-            let ig: i32 = (255.999 * g) as i32;
-            let ib: i32 = (255.999 * b) as i32;
-
-            println!("{} {} {}", ir, ig, ib)
+            let pixel_colour = Colour::new(
+                (i as f64) / ((image_width - 1) as f64),
+                (j as f64) / ((image_height - 1) as f64),
+                0.0,
+            );
+            write_colour(&pixel_colour);
         }
     }
 
