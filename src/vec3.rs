@@ -123,11 +123,7 @@ impl Div<&f64> for &Vec3 {
     type Output = Vec3;
 
     fn div(self, rhs: &f64) -> Vec3 {
-        Vec3 {
-            x: self.x / rhs,
-            y: self.y / rhs,
-            z: self.z / rhs,
-        }
+        &(1.0 / rhs) * self
     }
 }
 impl DivAssign<&f64> for Vec3 {
