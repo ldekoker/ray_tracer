@@ -145,6 +145,11 @@ impl DivAssign<f64> for Vec3 {
 // Aliases
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct Point3(Vec3);
+impl Point3 {
+    pub fn new(x: f64, y: f64, z: f64) -> Point3 {
+        Point3(Vec3::new(x, y, z))
+    }
+}
 impl Deref for Point3 {
     type Target = Vec3;
 
@@ -158,5 +163,19 @@ impl Add<Vec3> for Point3 {
 
     fn add(self, rhs: Vec3) -> Point3 {
         Point3(self.0 + rhs)
+    }
+}
+impl Sub<Vec3> for Point3 {
+    type Output = Point3;
+
+    fn sub(self, rhs: Vec3) -> Self::Output {
+        Point3(self.0 - rhs)
+    }
+}
+impl Sub for Point3 {
+    type Output = Vec3;
+
+    fn sub(self, rhs: Self) -> Self::Output {
+        self.0 - rhs.0
     }
 }
