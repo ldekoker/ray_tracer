@@ -1,4 +1,4 @@
-use std::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Neg, Sub};
+use std::ops::{Add, AddAssign, Deref, Div, DivAssign, Mul, MulAssign, Neg, Sub};
 
 /// A 3 dimensional vector type that implements
 /// many common, useful mathematical operations
@@ -148,3 +148,10 @@ impl ToString for Vec3 {
 
 // Aliases
 pub struct Point3(Vec3);
+impl Deref for Point3 {
+    type Target = Vec3;
+
+    fn deref(&self) -> &Self::Target {
+        &self.0
+    }
+}
