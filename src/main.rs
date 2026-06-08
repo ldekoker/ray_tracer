@@ -55,6 +55,8 @@ fn main() {
     info!("\rDone.");
 }
 
-fn ray_colour(_ray: &Ray) -> Colour {
-    Colour::new(0.0, 0.0, 0.0)
+fn ray_colour(ray: &Ray) -> Colour {
+    let unit_direction = ray.direction().unit_vector();
+    let a = 0.5 * (unit_direction.y() + 1.0);
+    Colour::new(1.0, 1.0, 1.0) * (1.0 - a) + Colour::new(0.5, 0.7, 1.0) * a
 }

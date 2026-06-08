@@ -1,4 +1,4 @@
-use std::ops::Deref;
+use std::ops::{Add, Deref, Mul};
 
 use crate::vec3::Vec3;
 
@@ -27,4 +27,19 @@ pub fn write_colour(pixel_color: Colour) {
     let bbyte: i32 = (255.999 * b) as i32;
 
     println!("{} {} {}", rbyte, gbyte, bbyte)
+}
+
+impl Mul<f64> for Colour {
+    type Output = Colour;
+
+    fn mul(self, rhs: f64) -> Self::Output {
+        Colour(self.0 * rhs)
+    }
+}
+impl Add for Colour {
+    type Output = Colour;
+
+    fn add(self, rhs: Self) -> Self::Output {
+        Colour(self.0 + rhs.0)
+    }
 }
