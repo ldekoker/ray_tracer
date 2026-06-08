@@ -1,9 +1,6 @@
 use env_logger::Env;
 use log::info;
-use ray_tracer::{
-    colour::{Colour, write_colour},
-    vec3::Vec3,
-};
+use ray_tracer::colour::{Colour, write_colour};
 
 fn main() {
     env_logger::Builder::from_env(Env::default().default_filter_or("info")).init();
@@ -22,7 +19,7 @@ fn main() {
                 (j as f64) / ((image_height - 1) as f64),
                 0.0,
             );
-            write_colour(&pixel_colour);
+            write_colour(pixel_colour);
         }
     }
 
