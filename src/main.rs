@@ -19,7 +19,7 @@ fn main() {
     // Camera
     let focal_length = 1.0;
     let viewport_height = 2.0;
-    let viewport_width = viewport_height * (image_width / image_height) as f64;
+    let viewport_width = viewport_height * (image_width as f64 / image_height as f64);
     let camera_center = Point3::new(0.0, 0.0, 0.0);
 
     // Calculate the vectors across the horizontal and down the vertical viewport edges.
@@ -56,7 +56,29 @@ fn main() {
 }
 
 fn ray_colour(ray: &Ray) -> Colour {
+    if hit_sphere(&Point3::new(0.0, 0.0, -1.0), 0.5, ray) {
+        return Colour::new(1.0, 0.0, 0.0);
+    }
     let unit_direction = ray.direction().unit_vector();
     let a = 0.5 * (unit_direction.y() + 1.0);
     Colour::new(1.0, 1.0, 1.0) * (1.0 - a) + Colour::new(0.5, 0.7, 1.0) * a
+}
+
+/// The Ray has hit the sphere if the discriminant (distance to center)
+/// is greater than or equal to 0 (i.e there are one or more solutions)
+fn hit_sphere(center: &Point3, radius: f64, ray: &Ray) -> bool {
+    // oc = (C - Q)
+    let oc = *center - ray.origin();
+
+    // a = d ⋅ d
+    let a = ray.direction().dot(ray.direction());
+    // b = -2d ⋅ (C - Q)
+    let b = -2.0 * ray.direction().dot(oc);
+    // c = (C - Q) ⋅ (C - Q) - r^2
+    let c = oc.dot(oc) - (radius * radius);
+
+    // b^2 - 4ac
+    let discriminant = (b * b) - (4.0 * a * c);
+
+    discriminant >= 0.0
 }
