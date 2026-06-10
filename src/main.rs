@@ -56,17 +56,17 @@ fn main() {
 }
 
 fn ray_colour(ray: &Ray) -> Colour {
-    if hit_sphere(&Point3::new(0.0, 0.0, -1.0), 0.5, ray) {
-        return Colour::new(1.0, 0.0, 0.0);
+    let time_of_collision = hit_sphere(&Point3::new(0.0, 0.0, -1.0), 0.5, ray);
+    if time_of_collision > 0.0 {
+        let normal = (ray.at(time_of_collision) - Vec3::new(0.0, 0.0, -1.0)).unit_vector();
+        return 0.5 * Colour::new(normal.x() + 1.0, normal.y() + 1.0, normal.z() + 1.0);
     }
     let unit_direction = ray.direction().unit_vector();
     let a = 0.5 * (unit_direction.y() + 1.0);
     Colour::new(1.0, 1.0, 1.0) * (1.0 - a) + Colour::new(0.5, 0.7, 1.0) * a
 }
 
-/// The Ray has hit the sphere if the discriminant (distance to center)
-/// is greater than or equal to 0 (i.e there are one or more solutions)
-fn hit_sphere(center: &Point3, radius: f64, ray: &Ray) -> bool {
+fn hit_sphere(center: &Point3, radius: f64, ray: &Ray) -> f64 {
     // oc = (C - Q)
     let oc = *center - ray.origin();
 
@@ -80,5 +80,8 @@ fn hit_sphere(center: &Point3, radius: f64, ray: &Ray) -> bool {
     // b^2 - 4ac
     let discriminant = (b * b) - (4.0 * a * c);
 
-    discriminant >= 0.0
+    match discriminant < 0.0 {
+        true => -1.0,
+        false => (-b - discriminant.sqrt()) / (2.0 * a),
+    }
 }
